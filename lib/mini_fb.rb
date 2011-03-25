@@ -181,7 +181,7 @@ module MiniFB
     # to hide value from simple introspection.
     def MiniFB.call(api_key, secret, method, kwargs)
 
-        puts 'kwargs=' + kwargs.inspect if @@logging
+#        puts 'kwargs=' + kwargs.inspect if @@logging
 
         if secret.is_a? String
             secret = FaceBookSecret.new(secret)
@@ -206,7 +206,7 @@ module MiniFB
         kwargs["sig"] = signature_for(kwargs, secret.value.call)
 
         fb_method = kwargs["method"].downcase
-        if fb_method == "photos.upload"
+        if fb_method == "photos.upload" || fb_method == 'video.upload'
             # Then we need a multipart post
             response = MiniFB.post_upload(file_name, kwargs)
         else
@@ -225,7 +225,7 @@ module MiniFB
 
         body = response.body
 
-        puts 'response=' + body.inspect if @@logging
+#        puts 'response=' + body.inspect if @@logging
         begin
             data = JSON.parse(body)
             if data.include?("error_msg")
@@ -610,7 +610,12 @@ module MiniFB
     # options:
     #   - params: Any additional parameters you would like to submit
     def self.rest(access_token, api_method, options={})
-        url = "https://api.facebook.com/method/#{api_method}"
+        if api_method != "video.upload"
+          url = "https://api.facebook.com/method/#{api_method}"
+        else
+          url = "https://api-video.facebook.com/method/#{api_method}"          
+        end
+        
         params = options[:params] || {}
         params[:access_token] = access_token
         params[:format] = "JSON"
