@@ -339,6 +339,19 @@ module MiniFB
         return nil if cookies["fbs_#{app_id}"].nil?
         Hash[*cookies["fbs_#{app_id}"].split('&').map { |v| v.gsub('"', '').split('=', 2) }.flatten]
     end
+    
+    def MiniFB.parse_oauth2_cookie_information(app_id, app_secret, cookies)
+      return nil if cookies["fbsr_#{app_id}"].nil?
+      sig, payload = cookies["fbsr_#{app_id}"].split(".")
+      data = JSON.parse(Base64.decode64(payload)+'"}') 
+      begin
+        e = RestClient.get "https://graph.facebook.com/oauth/access_token?client_id=#{app_id}&redirect_uri=&client_secret=#{app_secret}&code=#{data['code']}&response_type=token"
+      rescue Exception => e
+        puts e.inspect
+      else
+        return {'uid' => data['user_id'], 'access_token' => e.split("=").last}
+      end
+    end
 
     # Validates that the cookies sent by the user are those that were set by facebook. Since your
     # secret is only known by you and facebook it is used to sign all of the cookies set.
