@@ -340,6 +340,7 @@ module MiniFB
         Hash[*cookies["fbs_#{app_id}"].split('&').map { |v| v.gsub('"', '').split('=', 2) }.flatten]
     end
     
+    # Add support for parsing oauth2-cookies as well
     def MiniFB.parse_oauth2_cookie_information(app_id, app_secret, cookies)
       return nil if cookies["fbsr_#{app_id}"].nil?
       sig, payload = cookies["fbsr_#{app_id}"].split(".")
