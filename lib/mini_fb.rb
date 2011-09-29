@@ -346,7 +346,7 @@ module MiniFB
       sig, payload = cookies["fbsr_#{app_id}"].split(".")
       data = JSON.parse(Base64.decode64(payload)+'"}') 
       begin
-        e = RestClient.get "https://graph.facebook.com/oauth/access_token?client_id=#{app_id}&redirect_uri=&client_secret=#{app_secret}&code=#{data['code']}&response_type=token"
+        e = RestClient.get URI.escape("https://graph.facebook.com/oauth/access_token?client_id=#{app_id}&redirect_uri=&client_secret=#{app_secret}&code=#{data['code']}&response_type=token")
       rescue Exception => e
         puts e.inspect
       else
