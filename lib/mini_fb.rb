@@ -350,7 +350,8 @@ module MiniFB
       rescue Exception => e
         puts e.inspect
       else
-        return {'uid' => data['user_id'], 'access_token' => e.split("=").last}
+        e = e.split("&").inject({}){|m, (k,v)| k = k.split("="); m[k[0]] = k[1]; m }
+        return {'uid' => data['user_id'], 'access_token' => e['access_token']}
       end
     end
 
