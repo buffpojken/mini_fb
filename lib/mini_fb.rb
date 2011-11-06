@@ -318,6 +318,16 @@ module MiniFB
         sig = base64_url_decode(s)
         expected_sig = OpenSSL::HMAC.digest('SHA256', secret, p.tr("-_", "+/"))
         return sig == expected_sig
+    end         
+
+    # This function decodes the data sent by Facebook and returns a Hash.
+    # See: http://developers.facebook.com/docs/authentication/canvas
+    def self.signed_request_params(secret, req)
+        s, p = req.split(".")
+        p = base64_url_decode(p)
+        h = JSON.parse(p)
+        h.delete('algorithm') if h['algorithm'] == 'HMAC-SHA256'
+        h
     end
 
     # Ruby's implementation of base64 decoding seems to be reading the string in multiples of 4 and ignoring

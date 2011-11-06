@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "mini_fb"
-  s.version = "1.1.9"
+  s.version = "1.1.10"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Travis Reeder"]
-  s.date = "2011-10-03"
+  s.date = "2011-11-06"
   s.description = "Tiny facebook library"
   s.email = "travis@appoxy.com"
   s.extra_rdoc_files = [
