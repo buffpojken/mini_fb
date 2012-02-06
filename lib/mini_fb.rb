@@ -373,7 +373,7 @@ module MiniFB
     # * secret - the connect application secret
     # * cookies - the cookies given by facebook - it is ok to just pass all of the cookies, the method will do the filtering for you.
     def MiniFB.verify_cookie_signature(app_id, secret, cookies)
-        fb_keys = MiniFB.parse_cookie_information(app_id, cookies)
+        fb_keys = MiniFB.parse_oauth2_cookie_information(app_id, cookies)
         return false if fb_keys.nil?
 
         signature = fb_keys.delete('sig')
